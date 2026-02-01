@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Study Planner</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      color: #fff;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+
+    header p {
+      margin-top: 12px;
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 35px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .card h2 {
+      margin-bottom: 18px;
+      color: #5a4fcf;
+    }
+
+    .planner-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #667eea;
+    }
+
+    button {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .plan-output {
+      margin-top: 25px;
+      padding: 25px;
+      border-radius: 14px;
+      background: #f4f6ff;
+      display: none;
+    }
+
+    .plan-output h3 {
+      color: #5a4fcf;
+      margin-bottom: 10px;
+    }
+
+    .plan-output p {
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+
+    .plan-output ul {
+      list-style: none;
+    }
+
+    .plan-output li {
+      background: #fff;
+      margin-bottom: 10px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #fff;
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2.3rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>📘 Smart Study Planner</h1>
+  <p>Create effective, balanced, and stress-free study plans</p>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h2>🎯 Create Your Study Plan</h2>
+
+    <form class="planner-form" onsubmit="generatePlan(event)">
+      <div>
+        <label>Subject / Course Name</label>
+        <input type="text" id="subject" placeholder="e.g. Mathematics" required />
+      </div>
+
+      <div>
+        <label>Total Topics</label>
+        <input type="number" id="topics" placeholder="e.g. 20" required />
+      </div>
+
+      <div>
+        <label>Study Days Available</label>
+        <input type="number" id="days" placeholder="e.g. 10" required />
+      </div>
+
+      <div>
+        <label>Daily Study Hours</label>
+        <input type="number" id="hours" placeholder="e.g. 3" required />
+      </div>
+
+      <button type="submit">Generate Study Plan</button>
+    </form>
+
+    <div class="plan-output" id="output"></div>
+  </div>
+</div>
+
+<footer>
+  ✨ Designed for focused and stress-free learning
+</footer>
+
+<script>
+  function generatePlan(event) {
+    event.preventDefault();
+
+    const subject = document.getElementById("subject").value;
+    const topics = parseInt(document.getElementById("topics").value);
+    const days = parseInt(document.getElementById("days").value);
+    const hours = document.getElementById("hours").value;
+    const output = document.getElementById("output");
+
+    if (days > topics) {
+      alert("Study days cannot be more than total topics.");
+      return;
+    }
+
+    const topicsPerDay = Math.ceil(topics / days);
+
+    let planHTML = `
+      <h3>📅 ${subject} – ${days}-Day Study Plan</h3>
+      <p><strong>Daily Study Time:</strong> ${hours} hours</p>
+      <ul>
+    `;
+
+    let topicCount = 1;
+    for (let day = 1; day <= days; day++) {
+      let dailyTopics = [];
+      for (let i = 0; i < topicsPerDay && topicCount <= topics; i++) {
+        dailyTopics.push(`Topic ${topicCount}`);
+        topicCount++;
+      }
+      planHTML += `<li><strong>Day ${day}:</strong> ${dailyTopics.join(", ")}</li>`;
+    }
+
+    planHTML += `</ul>`;
+    output.innerHTML = planHTML;
+    output.style.display = "block";
+  }
+</script>
+
+</body>
+</html>
